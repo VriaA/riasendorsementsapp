@@ -174,7 +174,7 @@ h1 {
     -moz-background-clip: text;
     -ms-background-clip: text;
     background-clip: text;
-    animation: huerotate 8s alternate ease infinite;
+    animation: huerotate 8s alternate linear infinite;
 }
 
 @keyframes huerotate {
