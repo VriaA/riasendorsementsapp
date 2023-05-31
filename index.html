@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>We are the champions</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+        <link rel="manifest" href="site.webmanifest">
+
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    </head>
+
+    <body>    
+        <header>
+            <h1>We are the Champions</h1>
+            <div class="header-imgs">
+                <img class="rays" src="images/rays_white2_300x300.png" alt="white light rays behind a white silhouette of a man posing with a microphone">
+                <img class="header-img" src="images/freddie.svg" alt="White silhouette of a man posing with a microphone">
+            </div>
+        </header>  
+        
+        <main>
+            <form class="endorsement-form" id="endorsement-form">
+                <textarea class="endorsement-textarea" id="endorsement-textarea" placeholder="Write your endorsement here" aria-label="endorsement" required></textarea>
+                <input class="from-el" id="from-el" type="text" placeholder="From" aria-label="from" required>
+                <input class="to-el" id="to-el" type="text" placeholder="To" aria-label="to" required>
+                <button class="publish-btn" id="publish-btn" type="submit">Publish</button>
+                <div class="published" id="published-check"><i class="fa-solid fa-check"></i></div>
+            </form>
+
+            <section class="endorsements-cntr">
+                <h2>-&nbsp; Endorsements  &nbsp;-</h2>
+
+                <ul class="endorsements-el" id="endorsements-el">
+
+                </ul>
+            </section>
+        </main>
+
+        <div class="background-svgs-cntr">
+            <div class="background-svgs background-svg-left">   
+                <img class="shape-img" src="images/rect_light2.svg" alt="page svg background">
+            </div> 
+
+            <div class="background-svgs background-svg-right">   
+                <img class="shape-img2" src="images/rect_light2.svg" alt="page svg background">
+            </div> 
+        </div>
+        
+        <script src="index.js" type="module"></script>
+    </body>
+
+</html>
