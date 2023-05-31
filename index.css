@@ -191,6 +191,19 @@ h1 {
         background-clip: text;
     }
 
+    10% {
+        background: -webkit-linear-gradient(45deg, #82308a,#82308a, #a97df0, #a97df0, #82308a, #82308a);
+        background: -moz-linear-gradient(45deg, #82308a,#82308a, #a97df0, #a97df0, #82308a, #82308a);
+        background: -o-linear-gradient(45deg, #82308a,#82308a, #a97df0, #a97df0, #82308a, #82308a);
+        background: -ms-linear-gradient(45deg, #82308a,#82308a, #a97df0, #a97df0, #82308a, #82308a);
+        background: linear-gradient(45deg, #82308a,#82308a, #a97df0, #a97df0, #82308a, #82308a);
+        -webkit-background-clip: text;
+        -o-linearbackground-clip: text;
+        -moz-background-clip: text;
+        -ms-background-clip: text;
+        background-clip: text;
+    }
+
     20% {
         background: -webkit-linear-gradient(45deg, #bbd7f1, #82308a, #ff00ff, #f3abf3, #dbe9f7); 
         background: -moz-linear-gradient(45deg, #bbd7f1, #82308a, #ff00ff, #f3abf3, #dbe9f7); 
@@ -273,6 +286,20 @@ h1 {
     }
 
     80% {
+        background: -webkit-linear-gradient(45deg,#cfe1f3, #3a068f, #85ebe2, #85ebe2, #3a068f, #cfe1f3);
+        background: -webkit-linear-gradient(45deg, #cfe1f3, #3a068f, #85ebe2, #85ebe2, #3a068f, #cfe1f3); 
+        background: -moz-linear-gradient(45deg, #cfe1f3, #3a068f, #85ebe2, #85ebe2, #3a068f, #cfe1f3); 
+        background: -o-linear-gradient(45deg, #cfe1f3, #3a068f, #85ebe2, #85ebe2, #3a068f, #cfe1f3); 
+        background: -ms-linear-gradient(45deg, #cfe1f3, #3a068f, #85ebe2, #85ebe2, #3a068f, #cfe1f3); 
+        background: linear-gradient(45deg, #cfe1f3, #3a068f, #85ebe2, #85ebe2, #3a068f, #cfe1f3); 
+        -webkit-background-clip: text;
+        -o-linearbackground-clip: text;
+        -moz-background-clip: text;
+        -ms-background-clip: text;
+        background-clip: text;
+    }
+
+    90% {
         background: -webkit-linear-gradient(45deg,#cfe1f3, #a0919f, #4c4663, #85ebe2, #85ebe2, #3a068f, #bbd7f1);
         background: -webkit-linear-gradient(45deg, #cfe1f3, #a0919f, #4c4663, #85ebe2, #85ebe2, #3a068f, #bbd7f1); 
         background: -moz-linear-gradient(45deg, #cfe1f3, #a0919f, #4c4663, #85ebe2, #85ebe2, #3a068f, #bbd7f1); 
