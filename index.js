@@ -12,7 +12,7 @@ const publishCheck = document.getElementById('published-check')
 
 /* INITIALIZATION OF WEB APP AND SET UP OF DATABASE REFERENCE */
 const appSettings = {
-                        databaseURL:'https://rias-endorsements-default-rtdb.europe-west1.firebasedatabase.app/'
+                        databaseURL:'https://rias-playground-default-rtdb.europe-west1.firebasedatabase.app/'
 }
 
 const app = initializeApp(appSettings)
@@ -24,7 +24,7 @@ const endorsementsDB = ref(database, 'endorsements')
  INFORMATION IS USED TO LIKE AND UNLIKE AN ENDORSMENT */
 let endorsemntsInfoArr = []
 
-let savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem(' riasChampionsEndorsemntsInfoArr'))
+let savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem('riasChampionsEndorsemntsInfoArr'))
 if(savedEndorsemntsInfoArr) {
    endorsemntsInfoArr = savedEndorsemntsInfoArr
 } 
@@ -73,12 +73,14 @@ function renderCheckMarkBtn() {
 }
 
 /* LISTENS TO A CHANGE IN VALUE IN THE FIREBASE DATABASE,
+    IF THE DATABASE IS NOT EMPTY
 GETS THE ENDORSEMENTS IN THE DATABASE AS OBJECTS,
 CONVERTS EACH OBJECT INTO AN ARRAY AND PUSHES THE ARRAY INTO DBENDORSEMENT ARRAY.
 SAVES THE UPDATED ENDORSEMENT INFO TO LOCAL STORAGE.
 RENDERS ENDORSEMENTS,
-DELETES / LIKES AN ENDORSEMENT ON CLICK*/
-
+DELETES / LIKES AN ENDORSEMENT ON CLICK
+        IF THE DATABASE IS EMPTY
+A MESSAGE WILL BE RENDERED AND LOCAL STORAGE ITEMS WILL BE DELETED*/
 let dbEndorsementArray = []
 onValue(endorsementsDB, snapshot=> {
     if(snapshot.exists()) {
@@ -96,6 +98,8 @@ onValue(endorsementsDB, snapshot=> {
                     deleteEndorsement()
     } else {
         endorsementsEl.innerText = 'No endorsements yet.'
+        localStorage.removeItem('riasChampionsEndorsemntsInfoArr')
+        localStorage.removeItem('riasUserEndorsementsIds')
     }
 })
 
@@ -107,7 +111,7 @@ DATABASE WHEN savedEndorsemntsInfoArr IS NOT IN LOCAL STORAGE*/
 function createsavedEndorsemntsInfoArr(endorsementsInDB) {
     endorsementsInDB.forEach(endorsement=> {
        endorsemntsInfoArr.push( {id: endorsement[0], isLiked: false})
-        localStorage.setItem(' riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
+        localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
     })
 }
 
@@ -121,25 +125,27 @@ function saveNewEndorsementToLocalStorage(databaseEndorsements) {
                 }
             }
         }
-        localStorage.setItem(' riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
+        localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
 }
 
 //REMOVES THE ID AND ISLIKED INFORMATION OF A DELETED ENDORSEMENT FROM LOCAL STORAGE
 function updateSavedEndorsemntsInfoArr(endorsementsInDBArray) {
     if(endorsementsInDBArray) {
-        const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem(' riasChampionsEndorsemntsInfoArr'))
+        const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem('riasChampionsEndorsemntsInfoArr'))
 
         let updatedSavedEndorsemntsInfoArr = []
         for(let i = 0; i < endorsementsInDBArray.length; i++) {
             savedEndorsemntsInfoArr.filter(savedInfo=> {
                 if (savedInfo.id === endorsementsInDBArray[i][0]) {
-                    updatedSavedEndorsemntsInfoArr.push(savedInfo)
+                    if(updatedSavedEndorsemntsInfoArr.length !== endorsementsInDBArray.length) {
+                        updatedSavedEndorsemntsInfoArr.push(savedInfo)
+                    }
                 }
             })
         }
        endorsemntsInfoArr = updatedSavedEndorsemntsInfoArr
-        localStorage.setItem(' riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
-    }
+        localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
+    } 
 }
 
 /* PASSES INFORMATION ON EACH ENDORSEMENT IN THE FIREBASE 
@@ -164,7 +170,7 @@ function renderEndorsement(endorsementsArray) {
 /*CHANGES THE HEART/LIKE ICON COLOR WHEN CALLED BASED ON THE VALUE OF THE CORRELATING IS LIKED BOOLEAN SAVED TO LOCAL STORAGE*/
 function likeIconColor(likeIconId) {
     const endorsementsInDBArray = dbEndorsementArray[0]
-    const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem(' riasChampionsEndorsemntsInfoArr'))
+    const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem('riasChampionsEndorsemntsInfoArr'))
     if(savedEndorsemntsInfoArr) {
         for(let i = 0; i < endorsementsInDBArray.length; i++) {
             const savedIconInfo = savedEndorsemntsInfoArr.find(savedItem=> savedItem.id === endorsementsInDBArray[i][0])
@@ -176,6 +182,7 @@ function likeIconColor(likeIconId) {
                 const unLikedIcon = document.getElementById(`like-icon${savedEndorsemntsInfoArr[i].id}`)
                 unLikedIcon.classList.remove('liked')
                 likeIconAnimation(likeIconId)
+                deleteEndorsement()
             }
         }
     }
@@ -198,7 +205,7 @@ DELETES THE ENDORSEMENT ID FROM LOCAL STORAGE*/
 function deleteEndorsement() {
     const endorsementsInDBArray = dbEndorsementArray[0]
     const savedUserEndorsementsIds = JSON.parse(localStorage.getItem('riasUserEndorsementsIds'))
-    const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem(' riasChampionsEndorsemntsInfoArr'))
+    const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem('riasChampionsEndorsemntsInfoArr'))
     if(savedUserEndorsementsIds) {
         savedUserEndorsementsIds.forEach(savedEndorsementId=> {
             const endorsementLocationInDB = ref(database, `endorsements/${savedEndorsementId}`)
@@ -226,11 +233,12 @@ function deleteEndorsement() {
                    endorsemntsInfoArr = savedEndorsemntsInfoArr
                     setTimeout(_=> {
                         localStorage.setItem('riasUserEndorsementsIds', JSON.stringify(savedUserEndorsementsIds))
-                        localStorage.setItem(' riasChampionsEndorsemntsInfoArr', JSON.stringify(savedEndorsemntsInfoArr))
+                        localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(savedEndorsemntsInfoArr))
                         setTimeout(_=> {
                             deleteAnimation(endorsementEl)
                             setTimeout(_=> {
                                 remove(endorsementLocationInDB, `endorsements/${savedEndorsementId}`)
+                                updateSavedEndorsemntsInfoArr(endorsementsInDBArray)
                             }, 1200)
                         }, 200)
                     }, 100)
@@ -248,8 +256,7 @@ function deleteAnimation(endorsement) {
 
 //INCREASES THE LIKE COUNT OF AN ENDORSEMENT BASED ON THE VALUE OF THE CORRELATING ISLIKED VARIABLE IN LOCAL STORAGE
 endorsementsEl.addEventListener('click', e=>{
-        
-        const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem(' riasChampionsEndorsemntsInfoArr'))
+        const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem('riasChampionsEndorsemntsInfoArr'))
         const selectedArrayItem = savedEndorsemntsInfoArr.find(array => array.id === e.target.dataset.like)
         if(selectedArrayItem) {
             const countEl = document.getElementById(`like-count${selectedArrayItem.id}`)
@@ -262,7 +269,7 @@ endorsementsEl.addEventListener('click', e=>{
                        unlike(selectedArrayItem.id, count)
                 }selectedArrayItem.isLiked = !selectedArrayItem.isLiked
                endorsemntsInfoArr = savedEndorsemntsInfoArr
-                localStorage.setItem(' riasChampionsEndorsemntsInfoArr', JSON.stringify(savedEndorsemntsInfoArr))
+                localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(savedEndorsemntsInfoArr))
             likeIconColor(e.target.dataset.like)  
         }
 })
@@ -290,6 +297,5 @@ function saveUserEndorsementId() {
         } else {
             userEndorsementsIdsArr.push(endorsementsInDBArray[endorsementsInDBArray.length -1][0])
         }
-
-        localStorage.setItem('riasUserEndorsementsIds', JSON.stringify(userEndorsementsIdsArr))
+    localStorage.setItem('riasUserEndorsementsIds', JSON.stringify(userEndorsementsIdsArr))
 }
