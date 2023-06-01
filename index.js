@@ -132,19 +132,20 @@ function saveNewEndorsementToLocalStorage(databaseEndorsements) {
 function updateSavedEndorsemntsInfoArr(endorsementsInDBArray) {
     if(endorsementsInDBArray) {
         const savedEndorsemntsInfoArr = JSON.parse(localStorage.getItem('riasChampionsEndorsemntsInfoArr'))
-
-        let updatedSavedEndorsemntsInfoArr = []
-        for(let i = 0; i < endorsementsInDBArray.length; i++) {
-            savedEndorsemntsInfoArr.filter(savedInfo=> {
-                if (savedInfo.id === endorsementsInDBArray[i][0]) {
-                    if(updatedSavedEndorsemntsInfoArr.length !== endorsementsInDBArray.length) {
-                        updatedSavedEndorsemntsInfoArr.push(savedInfo)
+        if(savedEndorsemntsInfoArr) {
+            let updatedSavedEndorsemntsInfoArr = []
+            for(let i = 0; i < endorsementsInDBArray.length; i++) {
+                savedEndorsemntsInfoArr.filter(savedInfo=> {
+                    if (savedInfo.id === endorsementsInDBArray[i][0]) {
+                        if(updatedSavedEndorsemntsInfoArr.length !== endorsementsInDBArray.length) {
+                            updatedSavedEndorsemntsInfoArr.push(savedInfo)
+                        }
                     }
-                }
-            })
+                })
+            }
+           endorsemntsInfoArr = updatedSavedEndorsemntsInfoArr
+            localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
         }
-       endorsemntsInfoArr = updatedSavedEndorsemntsInfoArr
-        localStorage.setItem('riasChampionsEndorsemntsInfoArr', JSON.stringify(endorsemntsInfoArr))
     } 
 }
 
