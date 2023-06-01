@@ -12,7 +12,7 @@ const publishCheck = document.getElementById('published-check')
 
 /* INITIALIZATION OF WEB APP AND SET UP OF DATABASE REFERENCE */
 const appSettings = {
-                        databaseURL:'https://rias-playground-default-rtdb.europe-west1.firebasedatabase.app/'
+                        databaseURL:'https://rias-endorsements-default-rtdb.europe-west1.firebasedatabase.app/'
 }
 
 const app = initializeApp(appSettings)
